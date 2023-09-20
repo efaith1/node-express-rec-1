@@ -23,11 +23,8 @@ export default class WebSessionConcept {
   start(session: WebSessionDoc, username: string) {
     // In Express, the session is created spontaneously when the connection is first made, so we do not need
     // to explicitly allocate a session; we only need to keep track of the user.
-
-    // TODO: Make sure the user is logged out before allowing a new session to start.
-    // Hint: Take a look at how the "end" function makes sure the user is logged in. Keep in mind that a
-    // synchronization like starting a session should just consist of a series of actions that may throw
-    // exceptions and should not have its own control flow.
+    
+    this.isNotActive(session);
     session.user = username;
   }
 
@@ -46,6 +43,12 @@ export default class WebSessionConcept {
   isActive(session: WebSessionDoc) {
     if (session.user === undefined) {
       throw new UnauthenticatedError("Not logged in!");
+    }
+  }
+
+   isNotActive(session: WebSessionDoc) {
+    if (session.user !== undefined) {
+      throw new UnauthenticatedError("Not logged out yet!");
     }
   }
 }
